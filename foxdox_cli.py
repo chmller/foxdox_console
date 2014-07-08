@@ -33,6 +33,7 @@ class FoxdoxCli(Cmd):
         return True
 
     def help_exit(self):
+        #TODO: helptext
         pass
 
     def do_session(self, line):
@@ -41,6 +42,7 @@ class FoxdoxCli(Cmd):
         print 'Current folder', '%s' % self.client.session.current_folder['folder_name']
 
     def help_session(self):
+        #TODO: helptext
         pass
 
     def do_requesttoken(self, line):
@@ -68,28 +70,35 @@ class FoxdoxCli(Cmd):
             print response['Error'], response['StatusMsg']
 
     def help_deletetoken(self):
+        #TODO: helptext
         pass
 
     def do_listfolders(self, line):
         response = self.client.folder_listfolders()
         if response['Status'] == 200:
+            folders = []
             for folder in response['Items']:
-                print folder['Name']
+                folders.append(folder['Name'].encode('utf-8'))
+            self.columnize(folders)
         else:
             print response['Error'], response['StatusMsg']
 
     def help_listfolders(self):
+        #TODO: helptext
         pass
 
     def do_listdocuments(self, line):
         response = self.client.folder_listdocuments()
         if response['Status'] == 200:
+            documents = []
             for doc in response['Items']:
-                print doc['Name']
+                documents.append(doc['Name'].encode('utf-8'))
+            self.columnize(documents)
         else:
             print response['Error'], response['StatusMsg']
 
     def help_listdocuments(self):
+        #TODO: helptext
         pass
 
     def do_tree(self, line):
@@ -103,6 +112,7 @@ class FoxdoxCli(Cmd):
             self.session.reset()
 
     def help_tree(self):
+        #TODO: helptext
         pass
 
     def do_cd(self, line):
@@ -112,4 +122,12 @@ class FoxdoxCli(Cmd):
             print 'folder not found'
 
     def help_cd(self):
+        #TODO: helptext
+        pass
+
+    def do_download(self, line):
+        pass
+
+    def help_download(self):
+        #TODO: helptext
         pass
