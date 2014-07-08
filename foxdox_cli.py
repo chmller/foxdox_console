@@ -1,5 +1,6 @@
 import os
 import shlex
+import utils
 
 from cmd import Cmd
 from foxdox_client import FoxdoxClient
@@ -39,9 +40,22 @@ class FoxdoxCli(Cmd):
     def do_session(self, line):
         print 'SID', self.client.session.user_sid
         print 'Token', self.client.session.token
-        print 'Current folder', '%s' % self.client.session.current_folder['folder_name']
+        print 'Current folder', '%s' % utils.get_safe_value_from_dict(
+            self.client.session.current_folder, 'Name', default='')
 
     def help_session(self):
+        #TODO: helptext
+        pass
+
+    def do_clear(self, line):
+        import platform
+
+        if platform.system() == 'Windows':
+            os.system('cls')
+        else:
+            os.system('clear')
+
+    def help_clear(self):
         #TODO: helptext
         pass
 
@@ -73,55 +87,34 @@ class FoxdoxCli(Cmd):
         #TODO: helptext
         pass
 
-    def do_listfolders(self, line):
-        response = self.client.folder_listfolders()
-        if response['Status'] == 200:
-            folders = []
-            for folder in response['Items']:
-                folders.append(folder['Name'].encode('utf-8'))
-            self.columnize(folders)
-        else:
-            print response['Error'], response['StatusMsg']
+    def do_dir(self, line):
+        for folder in utils.get_safe_value_from_dict(self.client.session.folders, 'Items', default=[]):
+            print 'DIR'.ljust(3), folder['Name'].ljust(45), folder['Created'].rjust(29)
 
-    def help_listfolders(self):
+        for doc in utils.get_safe_value_from_dict(self.client.session.documents, 'Items', default=[]):
+            print 'DOC'.ljust(3), doc['Name'].ljust(45), doc['Created'].rjust(29)
+
+    def help_dir(self):
         #TODO: helptext
         pass
 
-    def do_listdocuments(self, line):
-        response = self.client.folder_listdocuments()
-        if response['Status'] == 200:
-            documents = []
-            for doc in response['Items']:
-                documents.append(doc['Name'].encode('utf-8'))
-            self.columnize(documents)
-        else:
-            print response['Error'], response['StatusMsg']
-
-    def help_listdocuments(self):
-        #TODO: helptext
-        pass
-
-    def do_tree(self, line):
-        response = self.client.folder_foldertree()
-
-        if response['Status'] == 200:
-            for folder in response['Items']:
-                print folder['Path']
-        else:
-            print response['Error'], response['StatusMsg']
-            self.session.reset()
-
-    def help_tree(self):
-        #TODO: helptext
-        pass
-
-    def do_cd(self, line):
+    def do_chdir(self, line):
         if self.client.changefolder(line):
-            print 'OK'
+            self.prompt = 'foxdox/%s> ' % utils.get_safe_value_from_dict(self.client.session.current_folder, 'Path',
+                                                                         default='')
         else:
             print 'folder not found'
 
-    def help_cd(self):
+    def complete_chdir(self, text, line, begidx, endidx):
+        print "debug", text
+        folders = []
+        for folder in utils.get_safe_value_from_dict(self.client.session.folders, 'Items', default=[]):
+            if folder['Name'].startswith(text):
+                folders.append(folder['Name'])
+
+        return folders
+
+    def help_chdir(self):
         #TODO: helptext
         pass
 
