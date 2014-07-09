@@ -106,15 +106,6 @@ class FoxdoxCli(Cmd):
         else:
             print 'folder not found'
 
-    def complete_chdir(self, text, line, begidx, endidx):
-        print "debug", text
-        folders = []
-        for folder in utils.get_safe_value_from_dict(self.client.session.folders, 'Items', default=[]):
-            if folder['Name'].startswith(text):
-                folders.append(folder['Name'])
-
-        return folders
-
     def help_chdir(self):
         #TODO: helptext
         pass
