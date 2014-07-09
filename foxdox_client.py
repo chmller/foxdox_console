@@ -12,8 +12,8 @@ from foxdox_session import FoxdoxSession
 
 class FoxdoxClient:
     def __init__(self):
-        self._developerId = 'LI8JRbcZxXWFJ3aqdnPN'
-        self._applicationId = 't8qIrYMtpJcZ4jYsY3Ul'
+        self._developerId = 'zp1xwCn976mX4kd5j2VM'
+        self._applicationId = 'bPEcEdEYqg68ryWBcct2'
         self._appVersion = '0.1'
         self._language = 'en'
         self._default_result = {'Status': 0, 'Error': 0, 'StatusMsg': ''}

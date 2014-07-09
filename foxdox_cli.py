@@ -88,11 +88,12 @@ class FoxdoxCli(Cmd):
         pass
 
     def do_dir(self, line):
+        #TODO: pretty output
         for folder in utils.get_safe_value_from_dict(self.client.session.folders, 'Items', default=[]):
-            print 'DIR'.ljust(3), folder['Name'].ljust(45), folder['Created'].rjust(29)
+            print '[DIR]'.ljust(5), folder['Name'].ljust(43), folder['Created'].rjust(29)
 
         for doc in utils.get_safe_value_from_dict(self.client.session.documents, 'Items', default=[]):
-            print 'DOC'.ljust(3), doc['Name'].ljust(45), doc['Created'].rjust(29)
+            print '[DOC]'.ljust(5), doc['Name'].ljust(43), doc['Created'].rjust(29)
 
     def help_dir(self):
         #TODO: helptext
